@@ -10,19 +10,19 @@ export async function onRequestPost({ request, env }) {
   try {
     if (isForm) { const d = await request.formData(); email = d.get("email") || ""; hp = d.get("website") || ""; }
     else { const j = await request.json(); email = j.email || ""; hp = j.website || ""; }
-  } catch { return reply(isForm, { error: "Bad request." }, 400); }
+  } catch { return reply(isForm, { error: "Bad request." }, 400, request); }
 
-  if (hp) return reply(isForm, { ok: true }, 200); // bot: pretend success
+  if (hp) return reply(isForm, { ok: true }, 200, request); // bot: pretend success
 
   email = String(email).trim().toLowerCase();
-  if (!EMAIL.test(email) || email.length > 254) return reply(isForm, { error: "That doesn't look like an email." }, 400);
+  if (!EMAIL.test(email) || email.length > 254) return reply(isForm, { error: "That doesn't look like an email." }, 400, request);
 
-  if (!env.SIGNUPS) return reply(isForm, { error: "Not configured." }, 500);
+  if (!env.SIGNUPS) return reply(isForm, { error: "Not configured." }, 500, request);
 
   const ip = request.headers.get("CF-Connecting-IP") || "";
   if (ip) {
     const k = `rl:${ip}`, n = parseInt((await env.SIGNUPS.get(k)) || "0", 10) + 1;
-    if (n > RL_MAX) return reply(isForm, { error: "Too many tries. Come back later." }, 429);
+    if (n > RL_MAX) return reply(isForm, { error: "Too many tries. Come back later." }, 429, request);
     await env.SIGNUPS.put(k, String(n), { expirationTtl: RL_WINDOW_S });
   }
 
@@ -34,12 +34,12 @@ export async function onRequestPost({ request, env }) {
       country: request.cf?.country || "",
     }));
   }
-  return reply(isForm, { ok: true }, 200);
+  return reply(isForm, { ok: true }, 200, request);
 }
 
-function reply(isForm, body, status) {
+function reply(isForm, body, status, request) {
   if (isForm) {
-    if (status < 400) return Response.redirect(new URL("/thanks.html", "https://actuallystupid.com"), 303);
+    if (status < 400) return Response.redirect(new URL("/thanks.html", request.url), 303);
     return new Response(body.error, { status, headers: { "content-type": "text/plain" } });
   }
   return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
