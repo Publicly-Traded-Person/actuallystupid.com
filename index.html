@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actually Stupid</title>
+<meta name="description" content="For people who want to talk about AI with people who don't talk about AI.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Actually Stupid</h1>
+  <p class="lede">For people who want to talk about AI with people who don't talk about AI.</p>
+
+  <p>Half the people I know hate AI, and probably more than the other half are using it. The people talking about it remind me of the crypto bros. I use it a lot to make things for myself and the people around me. I think it's pretty amazing to be finally able to "code."</p>
+
+  <p>I know I'm getting better, but it's hard to get better when half the people hate that you even touch AI and the other half are obsessed with only using the latest and greatest without any impulse to make anything.</p>
+
+  <p>The whole situation is actually stupid. It's a tool, and I like using it, and I like what it enables me to do.</p>
+
+  <h2>What this is</h2>
+  <p>I've never been in a "mastermind" because that seems like a scam that "coaches" sell access to after you attend a webinar, but this is what I imagine that is. It's people who are in the practice of using these tools sharing what they have done, what they are trying to do, and getting some feedback. It's like show and tell, but also like seeing someone's messy desktop and getting a sense of what unusual app they use. If we're all doing this, then let's hang out.</p>
+
+  <h2>Who it is for</h2>
+  <p>People who make things with AI and want to compare notes with people who make things with AI.</p>
+
+  <h2>Who it is not for</h2>
+  <p>Anyone with a course. Anyone with a framework. Anyone with a thread about the ten prompts that changed their life.</p>
+
+  <h2>How it works</h2>
+  <p>Small groups. On a call. Once in a while. Show, do not present. No slides. Someone goes first. Know-it-alls, arrogant blowhards, and people who talk more than they listen aren't invited back.</p>
+
+  <h2>The way in</h2>
+  <p>Currently invite only, but if this seems like you, drop your email and as we open things up we'll be in touch.</p>
+
+  <form id="join" method="post" action="/api/join">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+    <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit">Drop it</button>
+    <p class="note" id="msg" role="status"></p>
+  </form>
+
+  <footer>
+    <p>Started by Mike Merrill after conversations with a bunch of people doing the same thing, usually tech-adjacent creative folk.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var f = document.getElementById('join'), m = document.getElementById('msg');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var b = f.querySelector('button'); b.disabled = true; m.textContent = '';
+    fetch('/api/join', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email: f.email.value, website: f.website.value })
+    }).then(function (r) { return r.json().then(function (j) { return [r.ok, j]; }); })
+      .then(function (x) {
+        if (x[0]) { f.innerHTML = '<p class="note">Got it. We\'ll be in touch.</p>'; }
+        else { m.textContent = x[1].error || 'Something went wrong. Try again.'; b.disabled = false; }
+      }).catch(function () { m.textContent = 'Something went wrong. Try again.'; b.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

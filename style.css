@@ -1,0 +1,19 @@
+:root { color-scheme: light; --ink: #111; --paper: #fff; --mute: #666; --rule: #ddd; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+main { max-width: 34em; margin: 0 auto; padding: 3rem 16px 4rem; }
+h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .5rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.1rem; margin: 2.25rem 0 .5rem; }
+p { margin: 0 0 1rem; }
+.lede { font-size: 1.25rem; margin-bottom: 2rem; }
+form { margin: 1rem 0 0; display: grid; gap: .5rem; max-width: 24em; }
+label { font-size: .9rem; color: var(--mute); }
+input[type=email], button { font: inherit; padding: .6em .8em; border: 1px solid var(--ink); border-radius: 4px; background: var(--paper); color: var(--ink); }
+button { cursor: pointer; background: var(--ink); color: var(--paper); justify-self: start; }
+button:disabled { opacity: .6; cursor: default; }
+input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #005fcc; outline-offset: 2px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.note { font-size: .95rem; color: var(--mute); margin: .25rem 0 0; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--mute); font-size: .95rem; }
+a { color: inherit; }
